@@ -1,8 +1,7 @@
-package it.vincenzopio.chatpatcher.chat.message;
+package it.vincenzopio.chatpatcher.server.chat.message;
 
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
-import com.velocitypowered.api.proxy.crypto.IdentifiedKey;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.packet.chat.ChatHandler<KeyedPlayerChat> {
     private static final Logger logger = LogManager.getLogger(MPatchKeyedHandler.class);

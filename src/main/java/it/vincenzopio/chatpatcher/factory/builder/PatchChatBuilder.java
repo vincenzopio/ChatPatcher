@@ -1,4 +1,4 @@
-package it.vincenzopio.chatpatcher.builder.v2;
+package it.vincenzopio.chatpatcher.factory.builder;
 
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
@@ -11,8 +11,8 @@ import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChat;
 import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommand;
 import com.velocitypowered.proxy.protocol.packet.chat.legacy.LegacyChat;
 import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommand;
-import it.vincenzopio.chatpatcher.builder.session.MappedSessionChat;
-import it.vincenzopio.chatpatcher.builder.session.MappedSessionCommand;
+import it.vincenzopio.chatpatcher.factory.mappings.MappedSessionChat;
+import it.vincenzopio.chatpatcher.factory.mappings.MappedSessionCommand;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
@@ -34,8 +34,7 @@ public class PatchChatBuilder extends ChatBuilderV2 {
         }
 
         //LEGACY
-        UUID identity = sender == null ? (senderIdentity == null ? Identity.nil().uuid()
-                : senderIdentity.uuid()) : sender.getUniqueId();
+        UUID identity = sender == null ? (senderIdentity == null ? Identity.nil().uuid() : senderIdentity.uuid()) : sender.getUniqueId();
         Component msg = component == null ? Component.text(message) : component;
 
         return new LegacyChat(ProtocolUtils.getJsonChatSerializer(version).serialize(msg), type.getId(), identity);
@@ -44,7 +43,6 @@ public class PatchChatBuilder extends ChatBuilderV2 {
 
     @Override
     public MinecraftPacket toServer() {
-
         if (version.compareTo(ProtocolVersion.MINECRAFT_1_19_3) >= 0) {
             //1.19.3+
             if (message.startsWith("/")) {
@@ -59,15 +57,12 @@ public class PatchChatBuilder extends ChatBuilderV2 {
             if (message.startsWith("/")) {
                 return new KeyedPlayerCommand(message.substring(1), List.of(), timestamp);
             } else {
-                // This will produce an error on the server, but needs to be here.
                 KeyedPlayerChat v1Chat = new KeyedPlayerChat(message);
                 v1Chat.setExpiry(this.timestamp);
                 return v1Chat;
             }
         }
-
-
-
+        //LEGACY
         LegacyChat chat = new LegacyChat();
         chat.setMessage(message);
         return chat;

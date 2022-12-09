@@ -1,4 +1,4 @@
-package it.vincenzopio.chatpatcher.builder.session;
+package it.vincenzopio.chatpatcher.factory.mappings;
 
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
@@ -27,7 +27,7 @@ public class MappedSessionChat {
         this.lastSeenMessages = lastSeenMessages;
     }
 
-    public SessionPlayerChat build(ProtocolUtils.Direction direction, ProtocolVersion protocolVersion){
+    public SessionPlayerChat build(ProtocolUtils.Direction direction, ProtocolVersion protocolVersion) {
         SessionPlayerChat sessionPlayerChat = new SessionPlayerChat();
         ByteBuf buf = Unpooled.buffer();
 
@@ -39,7 +39,7 @@ public class MappedSessionChat {
             buf.writeBytes(signature);
         }
 
-        lastSeenMessages        .encode(buf);
+        lastSeenMessages.encode(buf);
 
         sessionPlayerChat.decode(buf, direction, protocolVersion);
 

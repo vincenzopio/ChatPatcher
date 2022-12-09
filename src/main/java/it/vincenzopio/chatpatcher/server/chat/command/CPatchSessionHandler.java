@@ -1,11 +1,10 @@
-package it.vincenzopio.chatpatcher.chat.command;
+package it.vincenzopio.chatpatcher.server.chat.command;
 
 import com.velocitypowered.api.event.command.CommandExecuteEvent;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.CommandHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.builder.ChatBuilderV2;
-import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommand;
 import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommand;
 
 import java.util.concurrent.CompletableFuture;
@@ -39,24 +38,22 @@ public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommand
                 ChatBuilderV2 write = this.player.getChatBuilderFactory()
                         .builder()
                         .setTimestamp(packet.getTimeStamp())
-                        .asPlayer(this.player);
-
-
-                write.message("/" + commandToRun);
+                        .asPlayer(this.player)
+                        .message("/" + commandToRun);
 
                 return CompletableFuture.completedFuture(write.toServer());
             }
 
             return runCommand(this.server, this.player, commandToRun, hasRun -> {
-                if (!hasRun) {
-                    return this.player.getChatBuilderFactory()
-                            .builder()
-                            .setTimestamp(packet.getTimeStamp())
-                            .asPlayer(this.player)
-                            .message("/" + commandToRun)
-                            .toServer();
-                }
-                return null;
+                if (hasRun) return null;
+
+                return this.player.getChatBuilderFactory()
+                        .builder()
+                        .setTimestamp(packet.getTimeStamp())
+                        .asPlayer(this.player)
+                        .message("/" + commandToRun)
+                        .toServer();
+
             });
         }, packet.getCommand(), packet.getTimeStamp());
     }

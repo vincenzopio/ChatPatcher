@@ -1,4 +1,4 @@
-package it.vincenzopio.chatpatcher.builder.session;
+package it.vincenzopio.chatpatcher.factory.mappings;
 
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;

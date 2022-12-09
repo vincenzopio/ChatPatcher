@@ -1,4 +1,4 @@
-package it.vincenzopio.chatpatcher.chat.message;
+package it.vincenzopio.chatpatcher.server.chat.message;
 
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
@@ -32,24 +32,19 @@ public class MPatchSessionHandler implements ChatHandler<SessionPlayerChat> {
         EventManager eventManager = this.server.getEventManager();
         PlayerChatEvent toSend = new PlayerChatEvent(player, packet.getMessage());
         chatQueue.queuePacket(eventManager.fire(toSend)
-                        .thenApply(pme -> {
-                            PlayerChatEvent.ChatResult chatResult = pme.getResult();
-                            if (!chatResult.isAllowed()) {
-                                return null;
-                            }
+                .thenApply(pme -> {
+                    PlayerChatEvent.ChatResult chatResult = pme.getResult();
+                    if (!chatResult.isAllowed()) {
+                        return null;
+                    }
 
-                            String message = chatResult.getMessage().orElse(packet.getMessage());
+                    String message = chatResult.getMessage().orElse(packet.getMessage());
 
-                            return this.player.getChatBuilderFactory().builder()
-                                    .message(message)
-                                    .setTimestamp(packet.getTimestamp())
-                                    .toServer();
-                        })
-                        .exceptionally((ex) -> {
-                            logger.error("Exception while handling player chat for {}", player, ex);
-                            return null;
-                        }),
-                packet.getTimestamp()
+                    return this.player.getChatBuilderFactory().builder()
+                            .message(message)
+                            .setTimestamp(packet.getTimestamp())
+                            .toServer();
+                }), packet.getTimestamp()
         );
     }
 }
