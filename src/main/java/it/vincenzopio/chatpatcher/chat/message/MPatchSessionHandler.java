@@ -31,20 +31,19 @@ public class MPatchSessionHandler implements ChatHandler<SessionPlayerChat> {
         ChatQueue chatQueue = this.player.getChatQueue();
         EventManager eventManager = this.server.getEventManager();
         PlayerChatEvent toSend = new PlayerChatEvent(player, packet.getMessage());
-        chatQueue.queuePacket(
-                eventManager.fire(toSend)
+        chatQueue.queuePacket(eventManager.fire(toSend)
                         .thenApply(pme -> {
                             PlayerChatEvent.ChatResult chatResult = pme.getResult();
                             if (!chatResult.isAllowed()) {
                                 return null;
                             }
 
-                            if (chatResult.getMessage().map(str -> !str.equals(packet.getMessage())).orElse(false)) {
-                                return this.player.getChatBuilderFactory().builder().message(packet.getMessage())
-                                        .setTimestamp(packet.getTimestamp())
-                                        .toServer();
-                            }
-                            return packet;
+                            String message = chatResult.getMessage().orElse(packet.getMessage());
+
+                            return this.player.getChatBuilderFactory().builder()
+                                    .message(message)
+                                    .setTimestamp(packet.getTimestamp())
+                                    .toServer();
                         })
                         .exceptionally((ex) -> {
                             logger.error("Exception while handling player chat for {}", player, ex);

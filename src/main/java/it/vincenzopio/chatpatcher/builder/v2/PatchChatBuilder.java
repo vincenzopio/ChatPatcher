@@ -54,9 +54,7 @@ public class PatchChatBuilder extends ChatBuilderV2 {
                 return new MappedSessionChat(message, timestamp, 0L, false, new byte[0], new LastSeenMessages())
                         .build(ProtocolUtils.Direction.SERVERBOUND, version);
             }
-        }
-
-        else if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
+        } else if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
             //1.19+
             if (message.startsWith("/")) {
                 return new KeyedPlayerCommand(message.substring(1), List.of(), timestamp);
@@ -67,6 +65,8 @@ public class PatchChatBuilder extends ChatBuilderV2 {
                 return v1Chat;
             }
         }
+
+
 
         LegacyChat chat = new LegacyChat();
         chat.setMessage(message);
