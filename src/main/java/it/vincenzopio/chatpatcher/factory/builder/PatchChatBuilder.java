@@ -1,5 +1,6 @@
 package it.vincenzopio.chatpatcher.factory.builder;
 
+import com.google.common.collect.ImmutableList;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
@@ -27,7 +28,7 @@ public class PatchChatBuilder extends ChatBuilderV2 {
 
     @Override
     public MinecraftPacket toClient() {
-        if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
+        if (version.compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0) {
             //1.19+
             Component msg = component == null ? Component.text(message) : component;
             return new SystemChat(msg, type == ChatType.CHAT ? ChatType.SYSTEM : type);
@@ -52,10 +53,10 @@ public class PatchChatBuilder extends ChatBuilderV2 {
                 return new MappedSessionChat(message, timestamp, 0L, false, new byte[0], new LastSeenMessages())
                         .build(ProtocolUtils.Direction.SERVERBOUND, version);
             }
-        } else if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
+        } else if (version.compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0) {
             //1.19+
             if (message.startsWith("/")) {
-                return new KeyedPlayerCommand(message.substring(1), List.of(), timestamp);
+                return new KeyedPlayerCommand(message.substring(1), ImmutableList.of(), timestamp);
             } else {
                 KeyedPlayerChat v1Chat = new KeyedPlayerChat(message);
                 v1Chat.setExpiry(this.timestamp);

@@ -38,7 +38,7 @@ public class DefaultPlayerListener {
         ConnectedPlayer player = (ConnectedPlayer) event.getPlayer();
 
         // Skipping un-required players.
-        if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_19) <= 0) {
+        if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_19_1) <= 0) {
             return;
         }
 
@@ -82,7 +82,7 @@ public class DefaultPlayerListener {
                 return;
             }
 
-            // Chat & Commands for 1.19
+            // Chat & Commands for 1.19.1+
             chatHandler.set(sessionHandler, new MPatchKeyedHandler(velocityServer, player));
             commandHandler.set(sessionHandler, new CPatchKeyedHandler(player, velocityServer));
         } catch (Exception e) {
