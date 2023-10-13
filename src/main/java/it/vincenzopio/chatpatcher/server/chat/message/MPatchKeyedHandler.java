@@ -7,13 +7,14 @@ import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
 import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChat;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.concurrent.CompletableFuture;
 
 public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.packet.chat.ChatHandler<KeyedPlayerChat> {
-    private static final Logger logger = LogManager.getLogger(MPatchKeyedHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MPatchKeyedHandler.class);
 
     private final VelocityServer server;
     private final ConnectedPlayer player;
@@ -49,7 +50,7 @@ public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.pa
         });
 
         chatQueue.queuePacket(chatFuture.exceptionally((ex) -> {
-                    logger.error("Exception while handling player chat for {}", player, ex);
+                    LOGGER.error("Exception while handling player chat for {}", player, ex);
                     return null;
                 }), packet.getExpiry()
         );

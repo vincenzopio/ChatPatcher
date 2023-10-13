@@ -7,11 +7,11 @@ import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
 import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerChat;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MPatchSessionHandler implements ChatHandler<SessionPlayerChat> {
-    private static final Logger logger = LogManager.getLogger(MPatchSessionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MPatchSessionHandler.class);
 
     private final ConnectedPlayer player;
     private final VelocityServer server;

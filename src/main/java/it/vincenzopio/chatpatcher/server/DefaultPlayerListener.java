@@ -65,7 +65,7 @@ public class DefaultPlayerListener {
             chatBuilder.set(player, new PatchChatBuilderFactory(protocolVersion));
 
             // Need to patch the session handler >
-            ClientPlaySessionHandler sessionHandler = (ClientPlaySessionHandler) player.getConnection().getSessionHandler();
+            ClientPlaySessionHandler sessionHandler = (ClientPlaySessionHandler) player.getConnection().getActiveSessionHandler();
 
             // Patching out the chat handler!
             Field chatHandler = sessionHandler.getClass().getDeclaredField("chatHandler");
