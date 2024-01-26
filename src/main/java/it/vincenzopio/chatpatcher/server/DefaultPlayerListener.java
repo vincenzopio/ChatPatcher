@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static it.vincenzopio.chatpatcher.ChatPatcher.LOGGER;
 
@@ -34,7 +33,7 @@ public class DefaultPlayerListener {
         this.proxyServer = proxyServer;
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(order = PostOrder.FIRST)
     public void serverPostConnectEvent(ServerPostConnectEvent event) {
         ConnectedPlayer player = (ConnectedPlayer) event.getPlayer();
 
