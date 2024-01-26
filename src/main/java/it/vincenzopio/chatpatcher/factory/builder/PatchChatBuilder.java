@@ -5,13 +5,14 @@ import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatType;
+import com.velocitypowered.proxy.protocol.packet.chat.ComponentHolder;
 import com.velocitypowered.proxy.protocol.packet.chat.LastSeenMessages;
-import com.velocitypowered.proxy.protocol.packet.chat.SystemChat;
+import com.velocitypowered.proxy.protocol.packet.chat.SystemChatPacket;
 import com.velocitypowered.proxy.protocol.packet.chat.builder.ChatBuilderV2;
-import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChat;
-import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommand;
-import com.velocitypowered.proxy.protocol.packet.chat.legacy.LegacyChat;
-import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommand;
+import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChatPacket;
+import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommandPacket;
+import com.velocitypowered.proxy.protocol.packet.chat.legacy.LegacyChatPacket;
+import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommandPacket;
 import it.vincenzopio.chatpatcher.factory.mappings.MappedSessionChat;
 import it.vincenzopio.chatpatcher.factory.mappings.MappedSessionCommand;
 import net.kyori.adventure.identity.Identity;
@@ -31,14 +32,15 @@ public class PatchChatBuilder extends ChatBuilderV2 {
         if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
             //1.19+
             Component msg = component == null ? Component.text(message) : component;
-            return new SystemChat(msg, type == ChatType.CHAT ? ChatType.SYSTEM : type);
+
+            return new SystemChatPacket(new ComponentHolder(version, msg), type == ChatType.CHAT ? ChatType.SYSTEM : type);
         }
 
         //LEGACY
         UUID identity = sender == null ? (senderIdentity == null ? Identity.nil().uuid() : senderIdentity.uuid()) : sender.getUniqueId();
         Component msg = component == null ? Component.text(message) : component;
 
-        return new LegacyChat(ProtocolUtils.getJsonChatSerializer(version).serialize(msg), type.getId(), identity);
+        return new LegacyChatPacket(ProtocolUtils.getJsonChatSerializer(version).serialize(msg), type.getId(), identity);
     }
 
 
@@ -47,7 +49,7 @@ public class PatchChatBuilder extends ChatBuilderV2 {
         if (version.compareTo(ProtocolVersion.MINECRAFT_1_19_3) >= 0) {
             //1.19.3+
             if (message.startsWith("/")) {
-                return new MappedSessionCommand(message.substring(1), timestamp, 0L, new SessionPlayerCommand.ArgumentSignatures(), new LastSeenMessages())
+                return new MappedSessionCommand(message.substring(1), timestamp, 0L, new SessionPlayerCommandPacket.ArgumentSignatures(), new LastSeenMessages())
                         .build(ProtocolUtils.Direction.SERVERBOUND, version);
             } else {
                 return new MappedSessionChat(message, timestamp, 0L, false, new byte[0], new LastSeenMessages())
@@ -56,15 +58,16 @@ public class PatchChatBuilder extends ChatBuilderV2 {
         } else if (version.compareTo(ProtocolVersion.MINECRAFT_1_19) >= 0) {
             //1.19+
             if (message.startsWith("/")) {
-                return new KeyedPlayerCommand(message.substring(1), ImmutableList.of(), timestamp);
+                return new KeyedPlayerCommandPacket(message.substring(1), List.of(), timestamp);
             } else {
-                KeyedPlayerChat v1Chat = new KeyedPlayerChat(message);
+                var v1Chat = new KeyedPlayerChatPacket(message);
                 v1Chat.setExpiry(this.timestamp);
                 return v1Chat;
             }
         }
+
         //LEGACY
-        LegacyChat chat = new LegacyChat();
+        var chat = new LegacyChatPacket();
         chat.setMessage(message);
         return chat;
     }

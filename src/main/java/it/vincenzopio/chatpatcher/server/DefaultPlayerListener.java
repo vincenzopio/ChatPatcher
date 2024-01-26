@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static it.vincenzopio.chatpatcher.ChatPatcher.LOGGER;
 
@@ -33,7 +34,7 @@ public class DefaultPlayerListener {
         this.proxyServer = proxyServer;
     }
 
-    @Subscribe(order = PostOrder.FIRST)
+    @Subscribe(order = PostOrder.LAST)
     public void serverPostConnectEvent(ServerPostConnectEvent event) {
         ConnectedPlayer player = (ConnectedPlayer) event.getPlayer();
 
@@ -48,10 +49,10 @@ public class DefaultPlayerListener {
 
         patchedPlayers.add(player);
 
-        LOGGER.info("Patching " + player.getUsername());
-
         VelocityServer velocityServer = (VelocityServer) proxyServer;
         ProtocolVersion protocolVersion = player.getProtocolVersion();
+
+        LOGGER.info("Patching " + player.getUsername() + " Protocol: " + player);
 
         try {
             // Patching out the player key!
@@ -75,6 +76,7 @@ public class DefaultPlayerListener {
             Field commandHandler = sessionHandler.getClass().getDeclaredField("commandHandler");
             commandHandler.setAccessible(true);
 
+
             // Chat & Commands for 1.19.3+
             if (protocolVersion.compareTo(ProtocolVersion.MINECRAFT_1_19_3) >= 0) {
                 chatHandler.set(sessionHandler, new MPatchSessionHandler(player, velocityServer));
@@ -85,6 +87,7 @@ public class DefaultPlayerListener {
             // Chat & Commands for 1.19
             chatHandler.set(sessionHandler, new MPatchKeyedHandler(velocityServer, player));
             commandHandler.set(sessionHandler, new CPatchKeyedHandler(player, velocityServer));
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e, () -> "Could not patch player " + player.getUsername() + ". Have you updated to the latest build of Velocity (?)");
             patchedPlayers.remove(player);

@@ -6,11 +6,11 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
-import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerChat;
+import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerChatPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MPatchSessionHandler implements ChatHandler<SessionPlayerChat> {
+public class MPatchSessionHandler implements ChatHandler<SessionPlayerChatPacket> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MPatchSessionHandler.class);
 
     private final ConnectedPlayer player;
@@ -22,12 +22,12 @@ public class MPatchSessionHandler implements ChatHandler<SessionPlayerChat> {
     }
 
     @Override
-    public Class<SessionPlayerChat> packetClass() {
-        return SessionPlayerChat.class;
+    public Class<SessionPlayerChatPacket> packetClass() {
+        return SessionPlayerChatPacket.class;
     }
 
     @Override
-    public void handlePlayerChatInternal(SessionPlayerChat packet) {
+    public void handlePlayerChatInternal(SessionPlayerChatPacket packet) {
         ChatQueue chatQueue = this.player.getChatQueue();
         EventManager eventManager = this.server.getEventManager();
         PlayerChatEvent toSend = new PlayerChatEvent(player, packet.getMessage());

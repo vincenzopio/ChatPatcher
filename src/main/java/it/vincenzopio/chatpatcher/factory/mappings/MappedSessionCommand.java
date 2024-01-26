@@ -3,7 +3,7 @@ package it.vincenzopio.chatpatcher.factory.mappings;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.packet.chat.LastSeenMessages;
-import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommand;
+import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommandPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -14,10 +14,10 @@ public class MappedSessionCommand {
     private final String command;
     private final Instant timeStamp;
     private final long salt;
-    private final SessionPlayerCommand.ArgumentSignatures argumentSignatures;
+    private final SessionPlayerCommandPacket.ArgumentSignatures argumentSignatures;
     private final LastSeenMessages lastSeenMessages;
 
-    public MappedSessionCommand(String command, Instant timeStamp, long salt, SessionPlayerCommand.ArgumentSignatures argumentSignatures, LastSeenMessages lastSeenMessages) {
+    public MappedSessionCommand(String command, Instant timeStamp, long salt, SessionPlayerCommandPacket.ArgumentSignatures argumentSignatures, LastSeenMessages lastSeenMessages) {
         this.command = command;
         this.timeStamp = timeStamp;
         this.salt = salt;
@@ -25,8 +25,8 @@ public class MappedSessionCommand {
         this.lastSeenMessages = lastSeenMessages;
     }
 
-    public SessionPlayerCommand build(ProtocolUtils.Direction direction, ProtocolVersion protocolVersion) {
-        SessionPlayerCommand sessionPlayerCommand = new SessionPlayerCommand();
+    public SessionPlayerCommandPacket build(ProtocolUtils.Direction direction, ProtocolVersion protocolVersion) {
+        var sessionPlayerCommand = new SessionPlayerCommandPacket();
         ByteBuf buf = Unpooled.buffer();
 
         ProtocolUtils.writeString(buf, command);

@@ -6,11 +6,11 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.CommandHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.builder.ChatBuilderV2;
-import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommand;
+import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommandPacket;
 
 import java.util.concurrent.CompletableFuture;
 
-public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommand> {
+public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommandPacket> {
     private final ConnectedPlayer player;
     private final VelocityServer server;
 
@@ -20,12 +20,12 @@ public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommand> {
     }
 
     @Override
-    public Class<KeyedPlayerCommand> packetClass() {
-        return KeyedPlayerCommand.class;
+    public Class<KeyedPlayerCommandPacket> packetClass() {
+        return KeyedPlayerCommandPacket.class;
     }
 
     @Override
-    public void handlePlayerCommandInternal(KeyedPlayerCommand packet) {
+    public void handlePlayerCommandInternal(KeyedPlayerCommandPacket packet) {
         EventManager eventManager = this.server.getEventManager();
 
         String message = packet.getCommand();

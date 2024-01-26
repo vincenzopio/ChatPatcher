@@ -6,14 +6,14 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
-import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChat;
+import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChatPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import java.util.concurrent.CompletableFuture;
 
-public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.packet.chat.ChatHandler<KeyedPlayerChat> {
+public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.packet.chat.ChatHandler<KeyedPlayerChatPacket> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MPatchKeyedHandler.class);
 
     private final VelocityServer server;
@@ -25,13 +25,13 @@ public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.pa
     }
 
     @Override
-    public Class<KeyedPlayerChat> packetClass() {
-        return KeyedPlayerChat.class;
+    public Class<KeyedPlayerChatPacket> packetClass() {
+        return KeyedPlayerChatPacket.class;
     }
 
 
     @Override
-    public void handlePlayerChatInternal(KeyedPlayerChat packet) {
+    public void handlePlayerChatInternal(KeyedPlayerChatPacket packet) {
         ChatQueue chatQueue = this.player.getChatQueue();
         EventManager eventManager = this.server.getEventManager();
         PlayerChatEvent toSend = new PlayerChatEvent(player, packet.getMessage());

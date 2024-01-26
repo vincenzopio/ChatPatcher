@@ -5,11 +5,11 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.CommandHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.builder.ChatBuilderV2;
-import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommand;
+import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerCommandPacket;
 
 import java.util.concurrent.CompletableFuture;
 
-public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommand> {
+public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommandPacket> {
     private final ConnectedPlayer player;
     private final VelocityServer server;
 
@@ -19,13 +19,13 @@ public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommand
     }
 
     @Override
-    public Class<SessionPlayerCommand> packetClass() {
-        return SessionPlayerCommand.class;
+    public Class<SessionPlayerCommandPacket> packetClass() {
+        return SessionPlayerCommandPacket.class;
     }
 
 
     @Override
-    public void handlePlayerCommandInternal(SessionPlayerCommand packet) {
+    public void handlePlayerCommandInternal(SessionPlayerCommandPacket packet) {
         queueCommandResult(this.server, this.player, event -> {
             CommandExecuteEvent.CommandResult result = event.getResult();
 
