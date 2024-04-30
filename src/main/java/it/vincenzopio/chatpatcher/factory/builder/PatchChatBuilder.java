@@ -18,6 +18,7 @@ import it.vincenzopio.chatpatcher.factory.mappings.MappedSessionCommand;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +47,8 @@ public class PatchChatBuilder extends ChatBuilderV2 {
 
     @Override
     public MinecraftPacket toServer() {
+        this.timestamp = this.timestamp == null ? Instant.now(): this.timestamp;
+
         if (version.compareTo(ProtocolVersion.MINECRAFT_1_19_3) >= 0) {
             //1.19.3+
             if (message.startsWith("/")) {

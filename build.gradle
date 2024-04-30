@@ -22,7 +22,6 @@ repositories {
 
 dependencies {
     compileOnly 'com.velocitypowered:velocity-api:3.3.0-SNAPSHOT'
-
     // Building requires velocity to be installed locally.
     compileOnly 'com.velocitypowered:velocity-proxy:3.3.0-SNAPSHOT'
 
