@@ -22,7 +22,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public class PatchChatBuilder extends ChatBuilderV2 {
+public final class PatchChatBuilder extends ChatBuilderV2 {
 
     public PatchChatBuilder(ProtocolVersion version) {
         super(version);

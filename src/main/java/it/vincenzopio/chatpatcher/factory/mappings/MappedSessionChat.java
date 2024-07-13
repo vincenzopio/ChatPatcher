@@ -9,7 +9,7 @@ import io.netty.buffer.Unpooled;
 
 import java.time.Instant;
 
-public class MappedSessionChat {
+public final class MappedSessionChat {
 
     private final String message;
     private final Instant timestamp;

@@ -7,11 +7,8 @@ import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
 import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerChatPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class MPatchSessionHandler implements ChatHandler<SessionPlayerChatPacket> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MPatchSessionHandler.class);
+public final class MPatchSessionHandler implements ChatHandler<SessionPlayerChatPacket> {
 
     private final ConnectedPlayer player;
     private final VelocityServer server;
@@ -31,7 +28,8 @@ public class MPatchSessionHandler implements ChatHandler<SessionPlayerChatPacket
         ChatQueue chatQueue = this.player.getChatQueue();
         EventManager eventManager = this.server.getEventManager();
         PlayerChatEvent toSend = new PlayerChatEvent(player, packet.getMessage());
-        chatQueue.queuePacket(eventManager.fire(toSend)
+
+        chatQueue.queuePacket(item -> eventManager.fire(toSend)
                 .thenApply(pme -> {
                     PlayerChatEvent.ChatResult chatResult = pme.getResult();
                     if (!chatResult.isAllowed()) {
@@ -44,7 +42,6 @@ public class MPatchSessionHandler implements ChatHandler<SessionPlayerChatPacket
                             .message(message)
                             .setTimestamp(packet.getTimestamp())
                             .toServer();
-                }), packet.getTimestamp()
-        );
+                }), packet.getTimestamp(), null);
     }
 }

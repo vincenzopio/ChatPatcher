@@ -5,16 +5,16 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer;
 import com.velocitypowered.proxy.protocol.MinecraftPacket;
+import com.velocitypowered.proxy.protocol.packet.chat.ChatHandler;
 import com.velocitypowered.proxy.protocol.packet.chat.ChatQueue;
 import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerChatPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
-public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.packet.chat.ChatHandler<KeyedPlayerChatPacket> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MPatchKeyedHandler.class);
+import static it.vincenzopio.chatpatcher.ChatPatcher.LOGGER;
+
+public final class MPatchKeyedHandler implements ChatHandler<KeyedPlayerChatPacket> {
 
     private final VelocityServer server;
     private final ConnectedPlayer player;
@@ -49,10 +49,9 @@ public class MPatchKeyedHandler implements com.velocitypowered.proxy.protocol.pa
                     .toServer();
         });
 
-        chatQueue.queuePacket(chatFuture.exceptionally((ex) -> {
-                    LOGGER.error("Exception while handling player chat for {}", player, ex);
-                    return null;
-                }), packet.getExpiry()
-        );
+        chatQueue.queuePacket(item -> chatFuture.exceptionally((ex) -> {
+            LOGGER.log(Level.SEVERE,  ex, () -> "Exception while handling player chat for " + player.getUsername());
+            return null;
+        }), packet.getExpiry(), null);
     }
 }

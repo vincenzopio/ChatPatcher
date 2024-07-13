@@ -9,7 +9,7 @@ import io.netty.buffer.Unpooled;
 
 import java.time.Instant;
 
-public class MappedSessionCommand {
+public final class MappedSessionCommand {
 
     private final String command;
     private final Instant timeStamp;

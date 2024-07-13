@@ -24,7 +24,7 @@ import java.util.logging.Level;
 
 import static it.vincenzopio.chatpatcher.ChatPatcher.LOGGER;
 
-public class DefaultPlayerListener {
+public final class DefaultPlayerListener {
 
     private final ProxyServer proxyServer;
     private final Set<Player> patchedPlayers = Collections.newSetFromMap(new WeakHashMap<>());
@@ -51,7 +51,7 @@ public class DefaultPlayerListener {
         VelocityServer velocityServer = (VelocityServer) proxyServer;
         ProtocolVersion protocolVersion = player.getProtocolVersion();
 
-        LOGGER.info("Patching " + player.getUsername() + " Protocol: " + player);
+        LOGGER.info(() -> "Patching " + player.getUsername() + " Protocol: " + player);
 
         try {
             // Patching out the player key!

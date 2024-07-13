@@ -11,13 +11,14 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 
-@Plugin(id = "chatpatcher", name = "Velocity Chat Patcher", version = "1.0.3", authors = "@vincenzopio")
-public class ChatPatcher {
+@Plugin(id = "chatpatcher", name = "Velocity Chat Patcher", version = "1.0.4", authors = "@vincenzopio")
+public final class ChatPatcher {
 
     public static final Logger LOGGER = LogManager.getLogManager().getLogger("ChatPatcher");
 
     @Inject
     private ProxyServer proxyServer;
+
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {

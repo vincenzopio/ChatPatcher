@@ -10,7 +10,7 @@ import com.velocitypowered.proxy.protocol.packet.chat.keyed.KeyedPlayerCommandPa
 
 import java.util.concurrent.CompletableFuture;
 
-public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommandPacket> {
+public final class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommandPacket> {
     private final ConnectedPlayer player;
     private final VelocityServer server;
 
@@ -30,7 +30,8 @@ public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommandPack
 
         String message = packet.getCommand();
 
-        player.getChatQueue().queuePacket(eventManager.fire(new CommandExecuteEvent(player, message)).thenComposeAsync(event -> {
+
+        player.getChatQueue().queuePacket(item -> eventManager.fire(new CommandExecuteEvent(player, message)).thenCompose(event -> {
             CommandExecuteEvent.CommandResult result = event.getResult();
 
             if (result == CommandExecuteEvent.CommandResult.denied()) {
@@ -59,6 +60,6 @@ public class CPatchKeyedHandler implements CommandHandler<KeyedPlayerCommandPack
                         .toServer();
 
             });
-        }).thenApplyAsync(pkt -> pkt), packet.getTimestamp());
+        }), packet.getTimestamp(), null);
     }
 }

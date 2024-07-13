@@ -9,7 +9,7 @@ import com.velocitypowered.proxy.protocol.packet.chat.session.SessionPlayerComma
 
 import java.util.concurrent.CompletableFuture;
 
-public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommandPacket> {
+public final class CPatchSessionHandler implements CommandHandler<SessionPlayerCommandPacket> {
     private final ConnectedPlayer player;
     private final VelocityServer server;
 
@@ -26,7 +26,7 @@ public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommand
 
     @Override
     public void handlePlayerCommandInternal(SessionPlayerCommandPacket packet) {
-        queueCommandResult(this.server, this.player, event -> {
+        queueCommandResult(this.server, this.player, (event, item) -> {
             CommandExecuteEvent.CommandResult result = event.getResult();
 
             if (result == CommandExecuteEvent.CommandResult.denied()) {
@@ -55,6 +55,6 @@ public class CPatchSessionHandler implements CommandHandler<SessionPlayerCommand
                         .toServer();
 
             });
-        }, packet.getCommand(), packet.getTimeStamp());
+        }, packet.getCommand(), packet.getTimeStamp(), null);
     }
 }
