@@ -74,6 +74,4 @@ public final class PatchChatBuilder extends ChatBuilderV2 {
         chat.setMessage(message);
         return chat;
     }
-
-
 }

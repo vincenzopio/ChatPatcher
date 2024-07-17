@@ -7,7 +7,7 @@ import it.vincenzopio.chatpatcher.factory.builder.PatchChatBuilder;
 
 import java.util.function.Function;
 
-public class PatchChatBuilderFactory extends ChatBuilderFactory {
+public final class PatchChatBuilderFactory extends ChatBuilderFactory {
 
     private final ProtocolVersion protocolVersion;
     private final Function<ProtocolVersion, ChatBuilderV2> builderFunction;

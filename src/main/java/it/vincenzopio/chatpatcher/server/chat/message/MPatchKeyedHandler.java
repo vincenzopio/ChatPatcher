@@ -19,7 +19,7 @@ public final class MPatchKeyedHandler implements ChatHandler<KeyedPlayerChatPack
     private final VelocityServer server;
     private final ConnectedPlayer player;
 
-    public MPatchKeyedHandler(VelocityServer server, ConnectedPlayer player) {
+    public MPatchKeyedHandler(ConnectedPlayer player, VelocityServer server) {
         this.server = server;
         this.player = player;
     }
@@ -50,7 +50,7 @@ public final class MPatchKeyedHandler implements ChatHandler<KeyedPlayerChatPack
         });
 
         chatQueue.queuePacket(item -> chatFuture.exceptionally((ex) -> {
-            LOGGER.log(Level.SEVERE,  ex, () -> "Exception while handling player chat for " + player.getUsername());
+            LOGGER.log(Level.SEVERE, ex, () -> "Exception while handling player chat for " + player.getUsername());
             return null;
         }), packet.getExpiry(), null);
     }
