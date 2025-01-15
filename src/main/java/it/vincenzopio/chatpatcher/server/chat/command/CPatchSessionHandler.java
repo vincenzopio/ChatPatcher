@@ -55,6 +55,6 @@ public final class CPatchSessionHandler implements CommandHandler<SessionPlayerC
                         .toServer();
 
             });
-        }, packet.getCommand(), packet.getTimeStamp(), null);
+        }, packet.getCommand(), packet.getTimeStamp(), null, new CommandExecuteEvent.InvocationInfo(CommandExecuteEvent.SignedState.UNSIGNED, CommandExecuteEvent.Source.PLAYER));
     }
 }

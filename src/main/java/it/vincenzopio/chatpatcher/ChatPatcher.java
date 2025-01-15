@@ -11,7 +11,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 
-@Plugin(id = "chatpatcher", name = "Velocity Chat Patcher", version = "1.0.4", authors = "@vincenzopio")
+@Plugin(id = "chatpatcher", name = "Velocity Chat Patcher", version = "1.0.5", authors = "@vincenzopio")
 public final class ChatPatcher {
 
     public static final Logger LOGGER = LogManager.getLogManager().getLogger("ChatPatcher");
