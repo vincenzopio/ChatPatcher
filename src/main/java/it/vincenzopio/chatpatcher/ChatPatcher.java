@@ -19,7 +19,6 @@ public final class ChatPatcher {
     @Inject
     private ProxyServer proxyServer;
 
-
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         LOGGER.info("Chat Patcher is now loading.");

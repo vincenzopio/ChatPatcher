@@ -39,7 +39,7 @@ public final class MappedSessionChat {
             buf.writeBytes(signature);
         }
 
-        lastSeenMessages.encode(buf);
+        lastSeenMessages.encode(buf, protocolVersion);
 
         sessionPlayerChat.decode(buf, direction, protocolVersion);
 

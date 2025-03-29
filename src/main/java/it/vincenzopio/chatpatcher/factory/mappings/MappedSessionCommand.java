@@ -33,7 +33,7 @@ public final class MappedSessionCommand {
         buf.writeLong(timeStamp.toEpochMilli());
         buf.writeLong(salt);
         argumentSignatures.encode(buf);
-        lastSeenMessages.encode(buf);
+        lastSeenMessages.encode(buf, protocolVersion);
 
         sessionPlayerCommand.decode(buf, direction, protocolVersion);
 
